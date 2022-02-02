@@ -9,7 +9,7 @@ export default async function handler(
   switch (req.method) {
     case 'GET':
       await prisma.users
-        .findMany()
+        .findMany({ where: { ...req.query } })
         .then((success) => res.status(200).json(success))
         .catch((error) => res.status(405).json(error));
       break;
