@@ -37,7 +37,18 @@ export default async function handler(
             events: { include: { wallet: { include: { bookmaker: true } } } },
           },
         })
-        .then((success) => res.status(201).json(success))
+        .then((success) => {
+          operations.forEach(async (operation: any) => {
+            await prisma.wallets.update({
+              where: { id: operation.walletId },
+              data: {
+                balance: { decrement: operation.input },
+              },
+            });
+          });
+
+          res.status(201).json(success);
+        })
         .catch((error) => res.status(405).json(error));
       break;
     default:
