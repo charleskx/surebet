@@ -7,38 +7,43 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import axios from 'axios';
+import { useUser } from '../hooks/useUser';
 
 import SignInBG from '../public/bg/signIn.jpg';
 
 import type { NextPage } from 'next';
 
 const SignUp: NextPage = () => {
-  const handleSignUp = useCallback(async (event: React.SyntheticEvent) => {
-    try {
-      event.preventDefault();
+  const { onLogIn, onLogOut } = useUser();
 
-      const { firstName, lastName, username, email, password }: any =
-        event.target;
+  const handleSignUp = useCallback(
+    async (event: React.SyntheticEvent) => {
+      try {
+        event.preventDefault();
 
-      await axios
-        .post('/api/users', {
-          params: {
-            firstName: firstName.value,
-            lastName: lastName.value,
-            username: username.value,
-            email: email.value,
-            password: password.value,
-          },
-        })
-        .then(({ data }) => {
-          localStorage.setItem('user', JSON.stringify(data));
-          Route.push('/dashboard');
-        });
-    } catch (err) {
-      toast.error('Oops! Erro ao cadastrar usuário');
-      localStorage.removeItem('user');
-    }
-  }, []);
+        const { firstName, lastName, username, email, password }: any =
+          event.target;
+
+        await axios
+          .post('/api/users', {
+            params: {
+              firstName: firstName.value,
+              lastName: lastName.value,
+              username: username.value,
+              email: email.value,
+              password: password.value,
+            },
+          })
+          .then(({ data }) => {
+            onLogIn(data);
+          });
+      } catch (err) {
+        toast.error('Oops! Erro ao cadastrar usuário');
+        onLogOut();
+      }
+    },
+    [onLogIn, onLogOut]
+  );
 
   return (
     <>
