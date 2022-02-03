@@ -1,47 +1,51 @@
 import { useCallback } from 'react';
 import { toast } from 'react-toastify';
 
-import Route from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import axios from 'axios';
+import { useUser } from '../hooks/useUser';
 
 import SignInBG from '../public/bg/signIn.jpg';
 
 import type { NextPage } from 'next';
 
 const SignIn: NextPage = () => {
-  const handleSignIn = useCallback(async (event: React.SyntheticEvent) => {
-    try {
-      event.preventDefault();
+  const { onLogIn, onLogOut } = useUser();
 
-      const { username, password }: any = event.target;
+  const handleSignIn = useCallback(
+    async (event: React.SyntheticEvent) => {
+      try {
+        event.preventDefault();
 
-      await axios
-        .get('/api/users', {
-          params: {
-            username: username.value,
-            password: password.value,
-          },
-        })
-        .then(({ data }) => {
-          const user = data.shift();
+        const { username, password }: any = event.target;
 
-          if (typeof user === 'undefined') {
-            toast.error('Nome de usuário e/ou senha incorretos!');
-            localStorage.removeItem('user');
-          } else {
-            localStorage.setItem('user', JSON.stringify(user));
-            Route.push('/dashboard');
-          }
-        });
-    } catch (err) {
-      toast.error('Wrong!');
-      localStorage.removeItem('user');
-    }
-  }, []);
+        await axios
+          .get('/api/users', {
+            params: {
+              username: username.value,
+              password: password.value,
+            },
+          })
+          .then(({ data }) => {
+            const user = data.shift();
+
+            if (typeof user === 'undefined') {
+              onLogOut();
+              toast.error('Nome de usuário e/ou senha incorretos!');
+            } else {
+              onLogIn(user);
+            }
+          });
+      } catch (err) {
+        onLogOut();
+        toast.error('Wrong!');
+      }
+    },
+    [onLogIn, onLogOut]
+  );
 
   return (
     <>
