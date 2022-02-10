@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@prisma/client": "3.8.1",
+    "@unform/core": "^2.1.6",
+    "@unform/web": "^2.1.6",
     "axios": "^0.25.0",
     "date-fns": "^2.28.0",
     "next": "12.0.9",
@@ -16,7 +18,8 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
-    "react-toastify": "^8.1.1"
+    "react-toastify": "^8.1.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/node": "17.0.13",
