@@ -1,17 +1,19 @@
 import { useEffect, useMemo } from 'react';
 import { toast } from 'react-toastify';
-import { FiBell } from 'react-icons/fi';
+import { FiZap } from 'react-icons/fi';
 
 import Route from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { useUser } from '../../hooks/useUser';
+import { useSurebet } from '../../hooks/useSurebet';
 
 import Logo from '../../public/logo.svg';
 
 const Header = () => {
-  const { user, onLogIn, onLogOut } = useUser();
+  const { user } = useUser();
+  const { onOpenModal } = useSurebet();
 
   const navigation = useMemo(
     () => [
@@ -59,9 +61,10 @@ const Header = () => {
             <button
               type="button"
               className="flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              onClick={onOpenModal}
             >
               <span className="sr-only">View notifications</span>
-              <FiBell />
+              <FiZap />
             </button>
 
             <div className="bg-white ml-4 rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
