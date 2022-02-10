@@ -4,11 +4,11 @@ import { Header } from '../components';
 
 import type { NextPage } from 'next';
 
-const Dashboard: NextPage = () => {
+const Inputs: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Surebet - Dashboard</title>
+        <title>Surebet - Carteiras</title>
       </Head>
 
       <Header />
@@ -20,4 +20,4 @@ const Dashboard: NextPage = () => {
   );
 };
 
-export default Dashboard;
+export default Inputs;
