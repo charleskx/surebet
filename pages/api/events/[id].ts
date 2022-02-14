@@ -32,7 +32,7 @@ export default async function handler(
                 where: { id: event.walletId },
                 data: {
                   balance: {
-                    increment: event.input + event.profit,
+                    increment: data.amount + event.profit,
                   },
                 },
               });
