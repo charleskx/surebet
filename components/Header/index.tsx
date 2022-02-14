@@ -88,23 +88,29 @@ const Header = () => {
                 ))}
               </nav>
             </div>
-            <div className="hidden lg:ml-4 lg:flex lg:items-center">
-              <p className="mr-2 text-gray-400 p-1">
+            <div
+              className="hidden lg:ml-4 lg:flex lg:items-center"
+              title="Saldo disponível para investimento"
+            >
+              <p className="mr-2 text-blue-400 p-1 font-mono text-sm font-semibold">
                 {formatCurrency(balance)}
               </p>
               <button
                 type="button"
                 title="Registrar Entrada"
-                className="flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="flex-shrink-0 bg-white p-1 text-blue-400 rounded-full hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 onClick={onOpenModal}
               >
                 <span className="sr-only">View notifications</span>
                 <FiZap />
               </button>
 
-              <div className="bg-white ml-4 rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <div
+                className="bg-white ml-4 rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                title={`${user?.firstName} ${user?.lastName}`}
+              >
                 <span className="sr-only">Open user menu</span>
-                <span className="h-8 w-8 rounded-full bg-violet-700 text-white font-black flex items-center justify-center">
+                <span className="h-8 w-8 rounded-full bg-blue-700 text-white font-black flex items-center justify-center font-mono">
                   {user?.firstName.substring(0, 1)}
                   {user?.lastName.substring(0, 1)}
                 </span>
@@ -113,7 +119,7 @@ const Header = () => {
               <button
                 type="button"
                 title="Sair"
-                className="flex-shrink-0 bg-white p-1 text-red-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ml-3"
+                className="flex-shrink-0 bg-white p-1 text-amber-400 rounded-full hover:text-amber-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ml-3"
                 onClick={onLogOut}
               >
                 <FiLogOut />
