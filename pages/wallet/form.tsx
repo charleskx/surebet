@@ -1,6 +1,7 @@
 import { useCallback, useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { Form } from '@unform/web';
+import { FormHandles } from '@unform/core';
 
 import { Bookmakers } from '@prisma/client';
 import axios from 'axios';
@@ -11,7 +12,6 @@ import { OptionsProps } from '../../components/Select';
 import * as Yup from 'yup';
 
 import { useUser } from '../../hooks/useUser';
-import { FormHandles } from '@unform/core';
 
 export interface IForm {
   bookmakerId?: string;
@@ -158,6 +158,7 @@ const FormWallet = ({ initials, id }: IWallet) => {
         <Select
           name="verified"
           label="Verificada"
+          loading={loading}
           data={[
             { id: 0, name: 'Não' },
             { id: 1, name: 'Sim' },
@@ -167,6 +168,7 @@ const FormWallet = ({ initials, id }: IWallet) => {
         <Select
           name="limited"
           label="Limitada"
+          loading={loading}
           data={[
             { id: 0, name: 'Não' },
             { id: 1, name: 'Sim' },

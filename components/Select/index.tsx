@@ -8,7 +8,7 @@ export interface OptionsProps {
 
 interface Props {
   name: string;
-  label: string;
+  label?: string;
   data: OptionsProps[];
   loading?: boolean;
 }
@@ -36,12 +36,14 @@ const Select = ({ data, name, label, loading, ...rest }: InputProps) => {
 
   return (
     <div className="w-full mb-6 md:mb-0">
-      <label
-        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-        htmlFor={fieldName}
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          htmlFor={fieldName}
+        >
+          {label}
+        </label>
+      )}
 
       <div className="relative">
         {loading ? (
@@ -62,7 +64,7 @@ const Select = ({ data, name, label, loading, ...rest }: InputProps) => {
               Selecionar
             </option>
             {data.map((option: OptionsProps) => (
-              <option value={option.id} key={option.id}>
+              <option value={option.id} key={Math.random()}>
                 {option.name}
               </option>
             ))}

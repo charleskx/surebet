@@ -16,6 +16,7 @@ export default async function handler(
           include: {
             events: { include: { wallet: { include: { bookmaker: true } } } },
           },
+          orderBy: { event: 'desc' },
         })
         .then((success) => res.status(200).json(success))
         .catch((error) => res.status(405).json(error));
