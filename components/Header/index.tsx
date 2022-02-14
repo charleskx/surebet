@@ -10,7 +10,7 @@ import { useUser } from '../../hooks/useUser';
 import { useSurebet } from '../../hooks/useSurebet';
 
 import Logo from '../../public/logo.svg';
-import Modal from '../Modal';
+import { Modal, Operation } from '../';
 
 const Header = () => {
   const { user } = useUser();
@@ -82,6 +82,7 @@ const Header = () => {
       </header>
 
       <Modal />
+      <Operation />
     </Fragment>
   );
 };

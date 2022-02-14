@@ -30,7 +30,25 @@ export default async function handler(
             events: { include: { wallet: { include: { bookmaker: true } } } },
           },
         })
-        .then((success) => res.status(200).json(success))
+        .then(async (success) => {
+          if (req.body.canceled) {
+            await prisma.operations
+              .findUnique({
+                where: { id },
+                include: { events: true },
+              })
+              .then(async (data: any) => {
+                await data.events.forEach(async (event: any) => {
+                  await prisma.wallets.update({
+                    where: { id: event.walletId },
+                    data: { balance: { increment: event.input } },
+                  });
+                });
+              });
+          }
+
+          res.status(200).json(success);
+        })
         .catch((error) => res.status(405).json(error));
       break;
     case 'DELETE':
