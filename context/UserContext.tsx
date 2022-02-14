@@ -4,7 +4,7 @@ import Route from 'next/router';
 
 type UserContextType = {
   user?: Users;
-  onLogIn: (user: Users) => void;
+  onLogIn: (user: Users, redirect: boolean) => void;
   onLogOut: () => void;
 };
 
@@ -13,13 +13,20 @@ export const UserContext = createContext({} as UserContextType);
 export function UserProvider({ children }: any) {
   const [user, setUser] = useState<Users>();
 
-  const onLogIn = useCallback((data: Users) => {
+  const onLogIn = useCallback((data: Users, redirect: boolean) => {
     setUser(data);
-    Route.push('/dashboard');
+
+    if (redirect) {
+      localStorage.setItem('auth', JSON.stringify(data));
+      Route.push('/dashboard');
+    }
   }, []);
 
   const onLogOut = useCallback(() => {
     setUser(undefined);
+
+    localStorage.removeItem('auth');
+    Route.push('/');
   }, []);
 
   return (
