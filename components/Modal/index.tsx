@@ -105,22 +105,28 @@ const Modal = () => {
         if (step === 1 && data.surebet) {
           const [team, homeTeam, awayTeam, coin] = data.surebet.split('\n');
 
-          await axios
-            .post('/api/operations', {
-              userId: user?.id,
-              event: parseDate(team.split('\t')[0]),
-              team: team.split('\t')[1],
-              category: team.split('\t')[2],
-              amount: parseFloat(coin.split('\t').filter(Boolean)[0]),
-            })
-            .then(({ data }) => {
-              setTeams([homeTeam, awayTeam]);
-              setOperation(data);
-              setStep(2);
-              reset();
+          // await axios
+          //   .post('/api/operations', {
+          //     userId: user?.id,
+          //     event: parseDate(team.split('\t')[0]),
+          //     team: team.split('\t')[1],
+          //     category: team.split('\t')[2],
+          //     amount: parseFloat(coin.split('\t').filter(Boolean)[0]),
+          //   })
+          //   .then(({ data }) => {
+          //     setTeams([homeTeam, awayTeam]);
+          //     setOperation(data);
+          //     setStep(2);
+          //     reset();
 
-              handleRequestWallets();
-            });
+          //     handleRequestWallets();
+          //   });
+
+          setTeams([homeTeam, awayTeam]);
+          setStep(2);
+          reset();
+
+          handleRequestWallets();
         }
 
         // Log the events
@@ -168,7 +174,7 @@ const Modal = () => {
 
   const handleGetOptionsWallet = useCallback(
     (bet?: string): any[] => {
-      if (bet)
+      if (bet) {
         return wallets
           .filter((wallet: any) =>
             removeZeroWidth(wallet.bookmaker.name).includes(
@@ -176,9 +182,10 @@ const Modal = () => {
             )
           )
           .map((wallet: any) => ({
-            id: wallet.bookmaker.id,
+            id: wallet.id,
             name: wallet.author,
           }));
+      }
 
       return [];
     },
