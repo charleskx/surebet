@@ -171,9 +171,9 @@ const Modal = () => {
       if (bet)
         return wallets
           .filter((i: any) =>
-            removeZeroWidth(i.bookmaker.name)
-              .toLowerCase()
-              .includes(removeZeroWidth(bet.toLowerCase().trim()))
+            removeZeroWidth(bet.toLowerCase().trim()).includes(
+              removeZeroWidth(i.bookmaker.name).toLowerCase()
+            )
           )
           .map((i: any) => ({
             id: i.bookmaker.id,
@@ -302,14 +302,7 @@ const Modal = () => {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900">
-                                  {parseFloat(
-                                    team
-                                      .split('\t')
-                                      .find((_, key) => key === 2) ?? ''
-                                  ).toLocaleString('pt-br', {
-                                    style: 'currency',
-                                    currency: 'BRL',
-                                  })}
+                                  {team.split('\t').find((_, key) => key === 2)}
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
