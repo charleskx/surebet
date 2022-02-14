@@ -36,7 +36,7 @@ const SignIn: NextPage = () => {
               onLogOut();
               toast.error('Nome de usuário e/ou senha incorretos!');
             } else {
-              onLogIn(user);
+              onLogIn(user, true);
             }
           });
       } catch (err) {
