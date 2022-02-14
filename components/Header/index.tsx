@@ -1,8 +1,7 @@
 import { useEffect, useMemo, Fragment } from 'react';
 import { toast } from 'react-toastify';
-import { FiZap } from 'react-icons/fi';
+import { FiZap, FiLogOut } from 'react-icons/fi';
 
-import Route from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -13,7 +12,7 @@ import Logo from '../../public/logo.svg';
 import { Modal, Operation } from '../';
 
 const Header = () => {
-  const { user } = useUser();
+  const { user, onLogIn, onLogOut } = useUser();
   const { onOpenModal } = useSurebet();
 
   const navigation = useMemo(
@@ -28,10 +27,16 @@ const Header = () => {
   // Check user logged
   useEffect(() => {
     if (!user) {
-      toast.info('Você não tem permissão para acessar esta página!');
-      Route.push('/');
+      const local = localStorage.getItem('auth');
+
+      if (local) {
+        onLogIn(JSON.parse(local), false);
+      } else {
+        toast.info('Você não tem permissão para acessar esta página!');
+        onLogOut();
+      }
     }
-  }, [user]);
+  }, [onLogIn, onLogOut, user]);
 
   return (
     <Fragment>
@@ -60,8 +65,10 @@ const Header = () => {
               </nav>
             </div>
             <div className="hidden lg:ml-4 lg:flex lg:items-center">
+              <p className="mr-2 text-gray-400 p-1">R$ 0,00</p>
               <button
                 type="button"
+                title="Registrar Entrada"
                 className="flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 onClick={onOpenModal}
               >
@@ -76,6 +83,15 @@ const Header = () => {
                   {user?.lastName.substring(0, 1)}
                 </span>
               </div>
+
+              <button
+                type="button"
+                title="Sair"
+                className="flex-shrink-0 bg-white p-1 text-red-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ml-3"
+                onClick={onLogOut}
+              >
+                <FiLogOut />
+              </button>
             </div>
           </div>
         </div>
