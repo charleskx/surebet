@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useMemo } from 'react';
 
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
@@ -36,6 +36,14 @@ const Modal = () => {
   const [wallets, setWallets] = useState<Wallets[]>([]);
 
   const formRef = useRef<FormHandles>(null);
+
+  const className = useMemo(
+    () =>
+      step === 1
+        ? 'inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full'
+        : 'inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-5xl sm:w-full',
+    [step]
+  );
 
   const { open, onCancellBet } = useSurebet();
   const { user } = useUser();
@@ -197,13 +205,7 @@ const Modal = () => {
           &#8203;
         </span>
 
-        <Form
-          className={`inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:${
-            Number(step) === 1 ? 'max-w-lg' : 'max-w-5xl'
-          } sm:w-full`}
-          onSubmit={handleSubmit}
-          ref={formRef}
-        >
+        <Form className={className} onSubmit={handleSubmit} ref={formRef}>
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="sm:flex sm:items-start">
               <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
