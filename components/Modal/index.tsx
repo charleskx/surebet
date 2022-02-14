@@ -105,28 +105,22 @@ const Modal = () => {
         if (step === 1 && data.surebet) {
           const [team, homeTeam, awayTeam, coin] = data.surebet.split('\n');
 
-          // await axios
-          //   .post('/api/operations', {
-          //     userId: user?.id,
-          //     event: parseDate(team.split('\t')[0]),
-          //     team: team.split('\t')[1],
-          //     category: team.split('\t')[2],
-          //     amount: parseFloat(coin.split('\t').filter(Boolean)[0]),
-          //   })
-          //   .then(({ data }) => {
-          //     setTeams([homeTeam, awayTeam]);
-          //     setOperation(data);
-          //     setStep(2);
-          //     reset();
+          await axios
+            .post('/api/operations', {
+              userId: user?.id,
+              event: parseDate(team.split('\t')[0]),
+              team: team.split('\t')[1],
+              category: team.split('\t')[2],
+              amount: parseFloat(coin.split('\t').filter(Boolean)[0]),
+            })
+            .then(({ data }) => {
+              setTeams([homeTeam, awayTeam]);
+              setOperation(data);
+              setStep(2);
+              reset();
 
-          //     handleRequestWallets();
-          //   });
-
-          setTeams([homeTeam, awayTeam]);
-          setStep(2);
-          reset();
-
-          handleRequestWallets();
+              handleRequestWallets();
+            });
         }
 
         // Log the events
