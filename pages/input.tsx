@@ -158,7 +158,10 @@ const Inputs: NextPage = () => {
               <Fragment key={Math.random()}>
                 <tr className={handleClassNameTR(operation)}>
                   <td className="px-3 py-4 whitespace-nowrap" rowSpan={3}>
-                    <p className="text-xs text-neutral-700 font-bold">
+                    <p
+                      className="text-xs text-neutral-700 font-bold"
+                      title={`${operation.team} \n${operation.category}`}
+                    >
                       {format(parseISO(operation.event.toString()), 'Pp', {
                         locale: ptBR,
                       })}
