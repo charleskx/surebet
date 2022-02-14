@@ -16,5 +16,8 @@ export function limitText({ limit, text }: ILimitTextProps): string {
 }
 
 export function removeZeroWidth(data: string): string {
-  return data.replace(/[\u200B-\u200D\uFEFF]/g, '');
+  return data
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+    .toLowerCase()
+    .trim();
 }

@@ -170,14 +170,14 @@ const Modal = () => {
     (bet?: string): any[] => {
       if (bet)
         return wallets
-          .filter((i: any) =>
-            removeZeroWidth(bet.toLowerCase().trim()).includes(
-              removeZeroWidth(i.bookmaker.name).toLowerCase()
+          .filter((wallet: any) =>
+            removeZeroWidth(wallet.bookmaker.name).includes(
+              removeZeroWidth(bet).split(' ')[0]
             )
           )
-          .map((i: any) => ({
-            id: i.bookmaker.id,
-            name: i.author,
+          .map((wallet: any) => ({
+            id: wallet.bookmaker.id,
+            name: wallet.author,
           }));
 
       return [];
