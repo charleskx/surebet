@@ -35,7 +35,7 @@ const SignUp: NextPage = () => {
             },
           })
           .then(({ data }) => {
-            onLogIn(data);
+            onLogIn(data, true);
           });
       } catch (err) {
         toast.error('Oops! Erro ao cadastrar usuário');

@@ -1,17 +1,22 @@
-import { useEffect, useMemo, Fragment } from 'react';
+import { useEffect, useMemo, Fragment, useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 import { FiZap, FiLogOut } from 'react-icons/fi';
+
+import axios from 'axios';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { useUser } from '../../hooks/useUser';
 import { useSurebet } from '../../hooks/useSurebet';
+import { formatCurrency } from '../../helper/utils';
 
 import Logo from '../../public/logo.svg';
 import { Modal, Operation } from '../';
 
 const Header = () => {
+  const [balance, setBalance] = useState<number>(0);
+
   const { user, onLogIn, onLogOut } = useUser();
   const { onOpenModal } = useSurebet();
 
@@ -23,6 +28,21 @@ const Header = () => {
     ],
     []
   );
+
+  const handleGetBalance = useCallback(async () => {
+    try {
+      await axios
+        .get(`/api/users/balance`, {
+          params: {
+            user: user?.id,
+          },
+        })
+        .then(({ data }) => setBalance(data._sum.balance ?? 0))
+        .catch((error) => console.info(error));
+    } catch (err) {
+      console.info(`Wrong! ${err}`);
+    }
+  }, [user?.id]);
 
   // Check user logged
   useEffect(() => {
@@ -37,6 +57,10 @@ const Header = () => {
       }
     }
   }, [onLogIn, onLogOut, user]);
+
+  useEffect(() => {
+    handleGetBalance();
+  }, [handleGetBalance]);
 
   return (
     <Fragment>
@@ -65,7 +89,9 @@ const Header = () => {
               </nav>
             </div>
             <div className="hidden lg:ml-4 lg:flex lg:items-center">
-              <p className="mr-2 text-gray-400 p-1">R$ 0,00</p>
+              <p className="mr-2 text-gray-400 p-1">
+                {formatCurrency(balance)}
+              </p>
               <button
                 type="button"
                 title="Registrar Entrada"
