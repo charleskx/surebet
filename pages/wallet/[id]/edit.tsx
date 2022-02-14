@@ -1,24 +1,31 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
 
+import { useRouter } from 'next/router';
+
+import axios from 'axios';
+
 import Head from 'next/head';
 import Link from 'next/link';
 
 import { Header } from '../../../components';
 
-import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import axios from 'axios';
+import { useLoading } from '../../../hooks/useLoading';
 
 import Form, { IForm } from '../form';
+
+import type { NextPage } from 'next';
 
 const WalletEdit: NextPage = () => {
   const [initials, setInitials] = useState<IForm | null>(null);
 
   const router = useRouter();
+  const { toggleLoading } = useLoading();
   const { id } = router.query;
 
   const handleRequestDataWallet = useCallback(async () => {
     try {
+      toggleLoading(true);
+
       await axios
         .get(`/api/wallets/${id}`)
         .then(({ data }) =>
@@ -31,8 +38,10 @@ const WalletEdit: NextPage = () => {
         .catch((error) => console.info(`Wrong! ${error}`));
     } catch (err) {
       console.info(err);
+    } finally {
+      toggleLoading(false);
     }
-  }, [id]);
+  }, [id, toggleLoading]);
 
   useEffect(() => {
     handleRequestDataWallet();

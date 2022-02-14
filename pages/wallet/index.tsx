@@ -8,6 +8,7 @@ import Link from 'next/link';
 import axios from 'axios';
 
 import { useUser } from '../../hooks/useUser';
+import { useLoading } from '../../hooks/useLoading';
 
 import { Header } from '../../components';
 
@@ -18,9 +19,12 @@ const Wallet: NextPage = () => {
   const [wallets, setWallets] = useState<any>([]);
 
   const { user } = useUser();
+  const { toggleLoading } = useLoading();
 
   const handleRequestWallets = useCallback(async () => {
     try {
+      toggleLoading(true);
+
       await axios
         .get('/api/wallets', { params: { user: user?.id } })
         .then((success) => {
@@ -29,12 +33,16 @@ const Wallet: NextPage = () => {
         .catch((error) => console.info(`Wrong! ${error}`));
     } catch (err) {
       console.info(err);
+    } finally {
+      toggleLoading(false);
     }
-  }, [user?.id]);
+  }, [toggleLoading, user?.id]);
 
   const handleRemoveWallet = useCallback(
     async (id) => {
       try {
+        toggleLoading(true);
+
         await axios
           .delete(`/api/wallets/${id}`)
           .then(() => {
@@ -44,9 +52,11 @@ const Wallet: NextPage = () => {
           .catch((error) => console.info(`Wrong! ${error}`));
       } catch (err) {
         console.info(err);
+      } finally {
+        toggleLoading(false);
       }
     },
-    [handleRequestWallets]
+    [handleRequestWallets, toggleLoading]
   );
 
   useEffect(() => {

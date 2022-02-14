@@ -9,10 +9,12 @@ import axios from 'axios';
 
 import Head from 'next/head';
 
-import { formatCurrency, limitText } from '../helper/utils';
-import { Header } from '../components';
 import { useUser } from '../hooks/useUser';
 import { useOperation } from '../hooks/useOperation';
+import { useLoading } from '../hooks/useLoading';
+
+import { formatCurrency, limitText } from '../helper/utils';
+import { Header } from '../components';
 import { ptBR } from 'date-fns/locale';
 import { toast } from 'react-toastify';
 
@@ -20,17 +22,22 @@ const Inputs: NextPage = () => {
   const [operations, setOperations] = useState<Operations[]>([]);
 
   const { user } = useUser();
+  const { toggleLoading } = useLoading();
   const { onOpenModal, open } = useOperation();
 
   const handleGetOperations = useCallback(async () => {
     try {
+      toggleLoading(true);
+
       await axios
         .get('/api/operations', { params: { user: user?.id } })
         .then(({ data }) => setOperations(data));
     } catch (err) {
       console.info(`Wrong! ${err}`);
+    } finally {
+      toggleLoading(false);
     }
-  }, [user?.id]);
+  }, [toggleLoading, user?.id]);
 
   const handleClassNameTR = useCallback((operation: Operations): string => {
     if (operation.canceled) return 'bg-yellow-100';
@@ -42,6 +49,8 @@ const Inputs: NextPage = () => {
   const handleRemoveOperation = useCallback(
     async (id: number): Promise<void> => {
       try {
+        toggleLoading(true);
+
         await axios
           .delete(`/api/operations/${id}`)
           .then(() => {
@@ -51,14 +60,18 @@ const Inputs: NextPage = () => {
           .catch((error) => console.info(`Wrong! ${error}`));
       } catch (err) {
         console.info(err);
+      } finally {
+        toggleLoading(false);
       }
     },
-    [handleGetOperations]
+    [handleGetOperations, toggleLoading]
   );
 
   const handleCancelloperation = useCallback(
     async (id: number): Promise<void> => {
       try {
+        toggleLoading(true);
+
         await axios
           .patch(`/api/operations/${id}`, {
             canceled: true,
@@ -70,9 +83,11 @@ const Inputs: NextPage = () => {
           .catch((err) => console.info(`Wrong! ${err}`));
       } catch (err) {
         console.info(err);
+      } finally {
+        toggleLoading(false);
       }
     },
-    [handleGetOperations]
+    [handleGetOperations, toggleLoading]
   );
 
   useEffect(() => {
