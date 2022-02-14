@@ -5,3 +5,4 @@ export { default as TextArea } from './Textarea';
 export { default as Select } from './Select';
 export { default as Button } from './Button';
 export { default as Operation } from './Operation';
+export { default as Loading } from './Loading';

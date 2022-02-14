@@ -1,13 +1,14 @@
 import { useCallback } from 'react';
 import { toast } from 'react-toastify';
 
-import Route from 'next/router';
+import axios from 'axios';
+
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import axios from 'axios';
 import { useUser } from '../hooks/useUser';
+import { useLoading } from '../hooks/useLoading';
 
 import SignInBG from '../public/bg/signIn.jpg';
 
@@ -15,10 +16,13 @@ import type { NextPage } from 'next';
 
 const SignUp: NextPage = () => {
   const { onLogIn, onLogOut } = useUser();
+  const { toggleLoading } = useLoading();
 
   const handleSignUp = useCallback(
     async (event: React.SyntheticEvent) => {
       try {
+        toggleLoading(true);
+
         event.preventDefault();
 
         const { firstName, lastName, username, email, password }: any =
@@ -40,9 +44,11 @@ const SignUp: NextPage = () => {
       } catch (err) {
         toast.error('Oops! Erro ao cadastrar usuário');
         onLogOut();
+      } finally {
+        toggleLoading(false);
       }
     },
-    [onLogIn, onLogOut]
+    [onLogIn, onLogOut, toggleLoading]
   );
 
   return (

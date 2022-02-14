@@ -1,12 +1,14 @@
 import { useCallback } from 'react';
 import { toast } from 'react-toastify';
 
+import axios from 'axios';
+
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import axios from 'axios';
 import { useUser } from '../hooks/useUser';
+import { useLoading } from '../hooks/useLoading';
 
 import SignInBG from '../public/bg/signIn.jpg';
 
@@ -14,10 +16,13 @@ import type { NextPage } from 'next';
 
 const SignIn: NextPage = () => {
   const { onLogIn, onLogOut } = useUser();
+  const { toggleLoading } = useLoading();
 
   const handleSignIn = useCallback(
     async (event: React.SyntheticEvent) => {
       try {
+        toggleLoading(true);
+
         event.preventDefault();
 
         const { username, password }: any = event.target;
@@ -42,9 +47,11 @@ const SignIn: NextPage = () => {
       } catch (err) {
         onLogOut();
         toast.error('Wrong!');
+      } finally {
+        toggleLoading(false);
       }
     },
-    [onLogIn, onLogOut]
+    [onLogIn, onLogOut, toggleLoading]
   );
 
   return (

@@ -12,6 +12,7 @@ import { OptionsProps } from '../../components/Select';
 import * as Yup from 'yup';
 
 import { useUser } from '../../hooks/useUser';
+import { useLoading } from '../../hooks/useLoading';
 
 export interface IForm {
   bookmakerId?: string;
@@ -39,10 +40,12 @@ const FormWallet = ({ initials, id }: IWallet) => {
   const formRef = useRef<FormHandles>(null);
 
   const { user } = useUser();
+  const { toggleLoading } = useLoading();
 
   const handleRequestBookmakers = useCallback(async () => {
     try {
       setLoading(true);
+      toggleLoading(true);
 
       await axios
         .get('/api/bookmakers')
@@ -56,13 +59,15 @@ const FormWallet = ({ initials, id }: IWallet) => {
       console.info(error);
     } finally {
       setLoading(false);
+      toggleLoading(false);
     }
-  }, []);
+  }, [toggleLoading]);
 
   const handleSubmit = useCallback(
     async (data: IForm, { reset }) => {
       try {
         setLoading(true);
+        toggleLoading(true);
 
         formRef.current?.setErrors({});
 
@@ -78,7 +83,7 @@ const FormWallet = ({ initials, id }: IWallet) => {
 
         const url = id ? `/api/wallets/${id}` : '/api/wallets';
 
-        axios({
+        await axios({
           url,
           method: id ? 'PATCH' : 'POST',
           data: {
@@ -107,9 +112,10 @@ const FormWallet = ({ initials, id }: IWallet) => {
         }
       } finally {
         setLoading(false);
+        toggleLoading(false);
       }
     },
-    [id, user?.id]
+    [id, toggleLoading, user?.id]
   );
 
   useEffect(() => {

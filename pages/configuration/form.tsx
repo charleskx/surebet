@@ -1,8 +1,8 @@
 import { useCallback, useState, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { Form } from '@unform/web';
+import { FormHandles } from '@unform/core';
 
-import { Users } from '@prisma/client';
 import axios from 'axios';
 
 import { Input, Button } from '../../components';
@@ -10,7 +10,7 @@ import { Input, Button } from '../../components';
 import * as Yup from 'yup';
 
 import { useUser } from '../../hooks/useUser';
-import { FormHandles } from '@unform/core';
+import { useLoading } from '../../hooks/useLoading';
 
 export interface IForm {
   firstName?: string;
@@ -33,10 +33,12 @@ const FormConfiguration = ({ initials }: IWallet) => {
   const formRef = useRef<FormHandles>(null);
 
   const { user } = useUser();
+  const { toggleLoading } = useLoading();
 
   const handleSubmit = useCallback(
     async (data: IForm) => {
       try {
+        toggleLoading(true);
         setLoading(true);
 
         formRef.current?.setErrors({});
@@ -52,7 +54,7 @@ const FormConfiguration = ({ initials }: IWallet) => {
           abortEarly: false,
         });
 
-        axios({
+        await axios({
           url: `/api/users/${user?.id}`,
           method: 'PATCH',
           data,
@@ -76,9 +78,10 @@ const FormConfiguration = ({ initials }: IWallet) => {
         }
       } finally {
         setLoading(false);
+        toggleLoading(false);
       }
     },
-    [user?.id]
+    [toggleLoading, user?.id]
   );
 
   return (
