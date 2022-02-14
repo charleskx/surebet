@@ -12,6 +12,7 @@ import { useSurebet } from '../../hooks/useSurebet';
 import { useUser } from '../../hooks/useUser';
 import { parseDate } from '../../helper/parseDateSurebet';
 import { TextArea, Select } from '../';
+import { removeZeroWidth } from '../../helper/utils';
 
 import Loading from '../../public/loading.gif';
 import { Operations, Wallets } from '@prisma/client';
@@ -162,13 +163,9 @@ const Modal = () => {
       if (bet)
         return wallets
           .filter((i: any) =>
-            i.bookmaker.name
+            removeZeroWidth(i.bookmaker.name)
               .toLowerCase()
-              .includes(
-                bet === 'Dafa​bet (Dafa Sports)'
-                  ? 'dafabet'
-                  : bet.toLowerCase().trim()
-              )
+              .includes(removeZeroWidth(bet.toLowerCase().trim()))
           )
           .map((i: any) => ({
             id: i.bookmaker.id,
