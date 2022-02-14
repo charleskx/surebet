@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id         Int          @id @default(autoincrement())
+  firstName  String
+  lastName   String
+  email      String       @unique
+  username   String       @unique
+  password   String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  wallets    Wallets[]
+  operations Operations[]
+}
+
+model Bookmakers {
+  id        Int       @id @default(autoincrement())
+  name      String
+  url       String
+  picture   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  wallets   Wallets[]
+}
+
+model Wallets {
+  id          Int        @id @default(autoincrement())
+  userId      Int
+  bookmakerId Int
+  login       String?
+  password    String?
+  author      String
+  balance     Float      @default(0)
+  verified    Boolean    @default(false)
+  limited     Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        Users      @relation(fields: [userId], references: [id])
+  bookmaker   Bookmakers @relation(fields: [bookmakerId], references: [id])
+  events      Events[]
+}
+
+model Operations {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  event     DateTime
+  team      String
+  category  String
+  amount    Float    @default(0)
+  finished  Boolean  @default(false)
+  canceled  Boolean  @default(false)
+  double    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      Users    @relation(fields: [userId], references: [id])
+  events    Events[]
+}
+
+model Events {
+  id          Int        @id @default(autoincrement())
+  operationId Int
+  walletId    Int
+  market      String
+  odd         Float      @default(0)
+  input       Float      @default(0)
+  profit      Float      @default(0)
+  win         Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  operations  Operations @relation(fields: [operationId], references: [id])
+  wallet      Wallets    @relation(fields: [walletId], references: [id])
+}
