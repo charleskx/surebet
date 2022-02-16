@@ -21,3 +21,16 @@ export function removeZeroWidth(data: string): string {
     .toLowerCase()
     .trim();
 }
+
+export function getFirstDayOfWeek(): Date {
+  const day = new Date().getDay();
+  const date = new Date();
+
+  const diff = date.getDate() - day;
+
+  return new Date(date.setDate(diff));
+}
+
+export function getFirstDayOfMonth(): Date {
+  return new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+}

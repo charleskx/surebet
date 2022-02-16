@@ -133,17 +133,18 @@ const FormWallet = ({ initials, id }: IWallet) => {
         <Select
           name="bookmakerId"
           label="Casa de Aposta"
-          disabled={Boolean(id || loading)}
           data={bookmakers}
           loading={loading}
+          disabled={Boolean(id || loading)}
         />
 
         <Input
           type="number"
           name="balance"
-          step={0.01}
           placeholder="10.5"
           label="Saldo Atual"
+          min={0}
+          step="any"
         />
       </div>
 
@@ -164,7 +165,6 @@ const FormWallet = ({ initials, id }: IWallet) => {
         <Select
           name="verified"
           label="Verificada"
-          loading={loading}
           data={[
             { id: 0, name: 'Não' },
             { id: 1, name: 'Sim' },
@@ -174,7 +174,6 @@ const FormWallet = ({ initials, id }: IWallet) => {
         <Select
           name="limited"
           label="Limitada"
-          loading={loading}
           data={[
             { id: 0, name: 'Não' },
             { id: 1, name: 'Sim' },
