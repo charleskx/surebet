@@ -12,8 +12,6 @@ export default async function handler(
     case 'GET':
       await prisma.operations
         .findMany({
-          take: 3,
-          skip: 1,
           where: { userId: user },
           include: {
             events: { include: { wallet: { include: { bookmaker: true } } } },
