@@ -47,18 +47,22 @@ const Profit = () => {
 
         switch (type) {
           case 0:
+            params.start = format(new Date(), 'yyyy-MM-dd');
+            params.end = '';
+            break;
+          case 1:
             params.start = format(getFirstDayOfWeek(), 'yyyy-MM-dd');
             params.end = format(new Date(), 'yyyy-MM-dd');
             break;
-          case 1:
+          case 2:
             params.start = format(getFirstDayOfMonth(), 'yyyy-MM-dd');
             params.end = format(new Date(), 'yyyy-MM-dd');
             break;
-          case 2:
+          case 3:
             params.start = format(new Date(), 'yyyy-01-01');
             params.end = format(new Date(), 'yyyy-MM-dd');
             break;
-          case 3:
+          case 4:
           default:
             params.start = '';
             params.end = '';
@@ -125,10 +129,11 @@ const Profit = () => {
             name="period"
             className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
             data={[
-              { id: 0, name: 'Semana' },
-              { id: 1, name: 'Mês' },
-              { id: 2, name: 'Ano' },
-              { id: 3, name: 'Tudo' },
+              { id: 0, name: 'Dia' },
+              { id: 1, name: 'Semana' },
+              { id: 2, name: 'Mês' },
+              { id: 3, name: 'Ano' },
+              { id: 4, name: 'Tudo' },
             ]}
           />
 
