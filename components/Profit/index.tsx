@@ -28,6 +28,7 @@ interface IErrors {
 
 const Profit = () => {
   const [currency, setCurrency] = useState(0);
+  const [initials, setInitials] = useState({ period: '0' });
 
   const formRef = useRef<FormHandles>(null);
 
@@ -35,37 +36,34 @@ const Profit = () => {
   const { user } = useUser();
 
   const handleRequeustCurrency = useCallback(
-    async (type: number) => {
+    async (period: string) => {
       try {
         toggleLoading(true);
+        setInitials({ period });
 
-        const params = {
+        let params = {
           start: '',
           end: '',
           user: user?.id,
         };
 
-        switch (type) {
-          case 0:
+        switch (period) {
+          case '0':
             params.start = format(new Date(), 'yyyy-MM-dd');
             params.end = '';
             break;
-          case 1:
+          case '1':
             params.start = format(getFirstDayOfWeek(), 'yyyy-MM-dd');
             params.end = format(new Date(), 'yyyy-MM-dd');
             break;
-          case 2:
+          case '2':
             params.start = format(getFirstDayOfMonth(), 'yyyy-MM-dd');
             params.end = format(new Date(), 'yyyy-MM-dd');
             break;
-          case 3:
+          case '3':
+          default:
             params.start = format(new Date(), 'yyyy-01-01');
             params.end = format(new Date(), 'yyyy-MM-dd');
-            break;
-          case 4:
-          default:
-            params.start = '';
-            params.end = '';
             break;
         }
 
@@ -101,7 +99,7 @@ const Profit = () => {
           abortEarly: false,
         });
 
-        await handleRequeustCurrency(data.period);
+        await handleRequeustCurrency(data.period.toString());
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const validationErrors: IErrors = {};
@@ -118,22 +116,26 @@ const Profit = () => {
   );
 
   useEffect(() => {
-    handleRequeustCurrency(0);
+    handleRequeustCurrency('0');
   }, [handleRequeustCurrency]);
 
   return (
     <div className="bg-white rounded shadow-lg p-6">
-      <Form className="w-full" ref={formRef} onSubmit={handleSubmit}>
+      <Form
+        className="w-full"
+        ref={formRef}
+        onSubmit={handleSubmit}
+        initialData={initials}
+      >
         <div className="flex items-center border-b border-teal-500 py-2">
           <Select
             name="period"
             className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
             data={[
-              { id: 0, name: 'Dia' },
-              { id: 1, name: 'Semana' },
-              { id: 2, name: 'Mês' },
-              { id: 3, name: 'Ano' },
-              { id: 4, name: 'Tudo' },
+              { id: '0', name: 'Dia' },
+              { id: '1', name: 'Semana' },
+              { id: '2', name: 'Mês' },
+              { id: '3', name: 'Ano' },
             ]}
           />
 
