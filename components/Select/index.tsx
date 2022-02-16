@@ -52,7 +52,7 @@ const Select = ({ data, name, label, loading, ...rest }: InputProps) => {
           </p>
         ) : (
           <select
-            className={`block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 ${
+            className={`disabled:opacity-60 block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 ${
               error && 'border-red-500'
             }`}
             id={fieldName}
@@ -60,11 +60,15 @@ const Select = ({ data, name, label, loading, ...rest }: InputProps) => {
             defaultValue={defaultValue}
             {...rest}
           >
-            <option selected value="">
+            <option disabled selected value="">
               Selecionar
             </option>
             {data.map((option: OptionsProps) => (
-              <option value={option.id} key={Math.random()}>
+              <option
+                value={option.id}
+                key={Math.random()}
+                selected={defaultValue === option.id}
+              >
                 {option.name}
               </option>
             ))}

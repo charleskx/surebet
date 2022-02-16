@@ -114,11 +114,11 @@ const Wallet: NextPage = () => {
                     </p>
                   </div>
 
-                  <div className="h-10 w-12 bg-stone-800 rounded-full flex align-middle items-center">
+                  <div className="h-10 w-12 bg-blue-700 rounded-full flex align-middle items-center">
                     <img
                       src={wallet?.bookmaker.picture}
                       alt={wallet?.bookmaker.name}
-                      className="w-10"
+                      className="rounded-full"
                       title={wallet?.bookmaker.name}
                     />
                   </div>
