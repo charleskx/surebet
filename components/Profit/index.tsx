@@ -115,22 +115,38 @@ const Profit = () => {
     [handleRequeustCurrency]
   );
 
+  const handleGetLegend = useCallback((type: string): string => {
+    switch (type) {
+      case '0':
+        return 'diario';
+      case '1':
+        return 'semanal';
+      case '2':
+        return 'mensal';
+      case '3':
+        return 'anual';
+      case '4':
+      default:
+        return 'geral';
+    }
+  }, []);
+
   useEffect(() => {
     handleRequeustCurrency('0');
   }, [handleRequeustCurrency]);
 
   return (
-    <div className="bg-white rounded shadow-lg p-6">
+    <div className="bg-slate-800 rounded shadow-lg p-8">
       <Form
         className="w-full"
         ref={formRef}
         onSubmit={handleSubmit}
         initialData={initials}
       >
-        <div className="flex items-center border-b border-teal-500 py-2">
+        <div className="flex items-center border-b border-slate-500 py-2">
           <Select
             name="period"
-            className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+            className="appearance-none bg-transparent border-none w-full text-slate-400 mr-3 py-1 px-2 leading-tight focus:outline-none"
             data={[
               { id: '0', name: 'Dia' },
               { id: '1', name: 'Semana' },
@@ -140,7 +156,7 @@ const Profit = () => {
           />
 
           <button
-            className="flex-shrink-0 bg-blue-500 hover:bg-blue-700 border-blue-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded disabled:opacity-20"
+            className="flex-shrink-0 bg-slate-500 hover:bg-slate-700 border-slate-500 hover:border-slate-700 text-sm border-4 text-white py-1 px-2 rounded disabled:opacity-20"
             type="submit"
             disabled={loading}
           >
@@ -149,8 +165,10 @@ const Profit = () => {
         </div>
       </Form>
       <div className="mt-4 text-center font-mono">
-        <p className="font-thin text-xs text-slate-500">Seu lucro foi de:</p>
-        <p className="font-bold text-2xl text-blue-700 mt-2">
+        <p className="font-thin text-xs text-slate-400">
+          Seu lucro {handleGetLegend(initials.period)} foi de:
+        </p>
+        <p className="font-bold text-3xl text-zinc-50 mt-2">
           {formatCurrency(currency)}
         </p>
       </div>
