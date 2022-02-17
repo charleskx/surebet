@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useMemo } from 'react';
+import { toast } from 'react-toastify';
 
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
@@ -10,13 +11,13 @@ import Image from 'next/image';
 
 import { useSurebet } from '../../hooks/useSurebet';
 import { useUser } from '../../hooks/useUser';
+import { useLoading } from '../../hooks/useLoading';
 import { parseDate } from '../../helper/parseDateSurebet';
 import { TextArea, Select } from '../';
 import { removeZeroWidth } from '../../helper/utils';
 
 import Loading from '../../public/loading.gif';
 import { Operations, Wallets } from '@prisma/client';
-import { toast } from 'react-toastify';
 
 interface IForm {
   surebet?: string;
@@ -29,7 +30,6 @@ interface IErrors {
 }
 
 const Modal = () => {
-  const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [operation, setOperation] = useState<Operations>();
   const [teams, setTeams] = useState<string[]>([]);
@@ -46,6 +46,7 @@ const Modal = () => {
   );
 
   const { open, onCancellBet } = useSurebet();
+  const { toggleLoading, loading } = useLoading();
   const { user } = useUser();
 
   const handleCloseModal = useCallback(() => {
@@ -61,7 +62,7 @@ const Modal = () => {
 
   const handleRequestWallets = useCallback(async () => {
     try {
-      setLoading(true);
+      toggleLoading(true);
 
       const wallets = await axios.get('/api/wallets', {
         params: { user: user?.id },
@@ -71,14 +72,14 @@ const Modal = () => {
     } catch (error) {
       console.info(`Wrong! ${error}`);
     } finally {
-      setLoading(false);
+      toggleLoading(false);
     }
-  }, [user?.id]);
+  }, [toggleLoading, user?.id]);
 
   const handleSubmit = useCallback(
     async (data: IForm, { reset }) => {
       try {
-        setLoading(true);
+        toggleLoading(true);
 
         formRef.current?.setErrors({});
 
@@ -160,10 +161,18 @@ const Modal = () => {
           formRef.current?.setErrors(validationErrors);
         }
       } finally {
-        setLoading(false);
+        toggleLoading(false);
       }
     },
-    [handleCloseModal, handleRequestWallets, operation, step, teams, user?.id]
+    [
+      handleCloseModal,
+      handleRequestWallets,
+      operation,
+      step,
+      teams,
+      toggleLoading,
+      user?.id,
+    ]
   );
 
   const handleGetOptionsWallet = useCallback(
@@ -232,7 +241,9 @@ const Modal = () => {
                 </div>
 
                 {loading ? (
-                  <Image src={Loading} layout="responsive" alt="Carregamento" />
+                  <div className="text-center">
+                    <Image src={Loading} alt="Carregamento" />
+                  </div>
                 ) : (
                   <div className="mt-6">
                     {step === 1 ? (
