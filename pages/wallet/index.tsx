@@ -105,7 +105,15 @@ const Wallet: NextPage = () => {
               <div key={wallet.id} className="bg-white rounded shadow-lg">
                 <div className="p-6 flex align-middle">
                   <div className="w-full">
-                    <p className="text-sm text-slate-800">{wallet.author}</p>
+                    <p className="text-sm text-slate-800">
+                      {wallet.author}{' '}
+                      {wallet.limited && (
+                        <span
+                          title="Conta Limitada"
+                          className="inline-block w-2 h-2 mr-2 bg-red-600 rounded-full"
+                        />
+                      )}
+                    </p>
                     <p className="text-sm text-slate-400">
                       {wallet.balance.toLocaleString('pt-BR', {
                         style: 'currency',
